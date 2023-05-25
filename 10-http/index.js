@@ -1,9 +1,9 @@
-const http = require('http');
-const EventEmitter = require('events')
 const PORT = 3333;
-const emitter = new EventEmitter();
-const Router = require('../framework/Router')
 const Application = require('../framework/Application')
+const userRouter = require('../src/user-router')
+const parseUrl = require('../framework/parseurl')
+const parseJson = require('../framework/parseJson')
+
 // const server = http.createServer((req, res) => {
 //     // res.writeHead(200, {
 //     //     'Content-type': 'text/html; charset=utf-8'
@@ -25,15 +25,9 @@ const Application = require('../framework/Application')
 
 
 const app = new Application();
-const router = new Router();
 
-router.get('/users', (req, res) => {
-    res.end('YOU SEND REQUEST TO /USERS')
-})
-console.log('router', router)
-router.get('/posts', (req, res) => {
-    res.end('YOU SEND REQUEST TO /POSTS')
-})
-app.addRouter(router)
+app.use(parseJson)
+app.use(parseUrl('http:/localhost:3333'))
+app.addRouter(userRouter)
 
 app.listen(PORT, () => console.log(`Server started on PORT: ${PORT}`))
